@@ -12,7 +12,7 @@ def insertar_proveedor():
         conexion = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="Carloscenm1987.",
+            password="mysql",
             database="dbliverpool"
         )
         cursor = conexion.cursor()
