@@ -10,7 +10,7 @@ def insertar_almacen():
         conexion = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="mysql",
+            password="Carloscenm1987.",
             database="dbliverpool"
         )
         cursor = conexion.cursor()
@@ -99,6 +99,12 @@ def eliminar_almacen():
             database="dbliverpool"
         )
         cursor = conexion.cursor()
+        # Verifica si hay artículos asociados a este almacén
+        cursor.execute("SELECT COUNT(*) FROM articulo WHERE almacen = %s", (no_lote,))
+        asociados = cursor.fetchone()[0]
+        if asociados > 0:
+            messagebox.showwarning("No permitido", "No se puede eliminar el almacén porque hay artículos asociados a él.")
+            return
         query = "DELETE FROM almacen WHERE No_Lote_Almacen = %s"
         cursor.execute(query, (no_lote,))
         conexion.commit()

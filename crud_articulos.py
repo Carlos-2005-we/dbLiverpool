@@ -14,7 +14,7 @@ def insertar_articulo():
         conexion = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="mysql",
+            password="Carloscenm1987.",
             database="dbliverpool"
         )
         cursor = conexion.cursor()
@@ -29,6 +29,28 @@ def insertar_articulo():
         limpiar_campos()
     except mysql.connector.Error as err:
         messagebox.showerror("Error", f"No se pudo insertar el artículo:\n{err}")
+    finally:
+        if conexion.is_connected():
+            cursor.close()
+            conexion.close()
+
+def buscar_articulo_por_id(id_articulo):
+    try:
+        conexion = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Carloscenm1987.",
+            database="dbliverpool"
+        )
+        cursor = conexion.cursor()
+        cursor.execute("SELECT * FROM articulo WHERE ID_Articulo = %s", (id_articulo,))
+        articulo = cursor.fetchone()
+        if articulo:
+            messagebox.showinfo("Artículo Encontrado", f"ID: {articulo[0]}\nNombre: {articulo[1]}\nPrecio: {articulo[2]}\nStock: {articulo[3]}\nCategoría: {articulo[4]}\nAlmacén: {articulo[5]}")
+        else:
+            messagebox.showwarning("No encontrado", f"No existe un artículo con ID: {id_articulo}")
+    except mysql.connector.Error as err:
+        messagebox.showerror("Error", f"No se pudo buscar el artículo:\n{err}")
     finally:
         if conexion.is_connected():
             cursor.close()

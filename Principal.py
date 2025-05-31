@@ -19,6 +19,9 @@ def abrir_ventana_categoria():
 
 def abrir_ventana_almacen():
     subprocess.Popen(["python", "almacen_gui.py"])
+    
+def abrir_ventana_venta():
+    subprocess.Popen(["python", "Factura.py"])
 
 # Ventana principal
 ventana = Tk()
@@ -32,6 +35,7 @@ Button(ventana, text="Registrar Proveedor", command=abrir_ventana_proveedor, bg=
 Button(ventana, text="Registrar Artículo", command=abrir_ventana_articulos, bg="lightpink").pack(pady=10, fill="x")
 Button(ventana, text="Gestionar Categorías", command=abrir_ventana_categoria, bg="lightgray").pack(pady=10, fill="x")
 Button(ventana, text="Gestionar Almacenes", command=abrir_ventana_almacen, bg="lightsteelblue").pack(pady=10, fill="x")
+Button(ventana, text="Realizar Venta", command=abrir_ventana_venta, bg="orange", fg="white").pack(pady=10, fill="x")
 
 Button(ventana, text="Salir", command=ventana.quit, bg="red", fg="white").pack(pady=20)
 

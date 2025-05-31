@@ -35,6 +35,11 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO cliente(ID_Cliente, Nombre, Apellido, Direccion, Telefono, Correo_Electronico, RFC) VALUES
+	(0000, 'Cliente', 'General', 'N/A', 'N/A', 'N/A', 'N/A'),
+	(1234, 'Mauricio', 'Perez', 'Av. Juarez', '1119992223', 'Mauricio@gmail.com', 'HCSKK8890LMM1'),
+	(5678, 'Pedro', 'Larez', 'Av. Central', '1119992224', 'Pedro@gmail.com', 'HCXKK8890LMM2'),
+	(9922, 'Julio', 'Alvarez', 'Calle Norte', '1119992225', 'Julio@gmail.com', 'HCMLL8890LMM1');
 
 -- -----------------------------------------------------
 -- Table `dbliverpool`.`categoria`
@@ -50,6 +55,9 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 5
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+INSERT INTO categoria(ID_Categoria, Nombre) VALUES
+	(1, 'Muebles'), (2, 'Electronica'), (3, 'Electrodomesticos'), (4, 'Deportes'), (5, 'Alimentos y Bebidas');
 
 
 -- -----------------------------------------------------
@@ -69,6 +77,10 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO empleado(ID_Empleado, Nombre, Apellido, Puesto, Departamento, Salario) VALUES
+	(12345, 'Juan', 'Nuñez', 'Cajero', 'Caja', 1500),
+	(67890, 'Fabricio', 'Ruiz', 'Conserje', 'Limpieza', 1200);
+
 
 -- -----------------------------------------------------
 -- Table `dbliverpool`.`Factura`
@@ -81,6 +93,9 @@ CREATE TABLE IF NOT EXISTS `dbliverpool`.`Factura` (
   `Importe` DECIMAL(10,2) NULL,
   `Direc_Establecimiento` VARCHAR(45) NULL,
   `Fecha` DATE NULL,
+  `Metodo_Pago` VARCHAR(45) NULL,
+  `Cantidad_pagada` FLOAT NULL,
+  `Cambio` FLOAT NULL,
   PRIMARY KEY (`idFactura`))
 ENGINE = InnoDB;
 
@@ -127,11 +142,14 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `dbliverpool`.`Almacen` ;
 
 CREATE TABLE IF NOT EXISTS `dbliverpool`.`Almacen` (
-  `Existencia` INT NULL,
-  `Articulos_proveedor` CHAR(10) NOT NULL,
   `No_Lote_Almacen` INT NOT NULL AUTO_INCREMENT,
+  `Existencia` INT NULL,
+  `Articulos_proveedor` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`No_Lote_Almacen`))
 ENGINE = InnoDB;
+
+INSERT INTO Almacen(No_Lote_Almacen, Existencia, Articulos_proveedor) VALUES
+	(1, 100, 'Refrescos'), (2, 200, 'Electronica'), (3, 250,'Muebles'), (4, 90, 'Electrodomesticos'), (5, 100, 'Articulos Deportivos');
 
 
 -- -----------------------------------------------------
@@ -140,12 +158,13 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `dbliverpool`.`articulo` ;
 
 CREATE TABLE IF NOT EXISTS `dbliverpool`.`articulo` (
-  `ID_Articulo` CHAR(10) NOT NULL,
+  `ID_Articulo` CHAR(13) NOT NULL,
   `Nombre` VARCHAR(100) NOT NULL,
   `Precio` FLOAT NOT NULL,
   `Existencia` INT NULL,
   `categoria` CHAR(10) NOT NULL,
   `Almacen` INT NOT NULL,
+  `Costo` FLOAT NULL,
   PRIMARY KEY (`ID_Articulo`),
   INDEX `fk_articulo_categoria1_idx` (`categoria` ASC) VISIBLE,
   INDEX `fk_articulo_Almacen1_idx` (`Almacen` ASC) VISIBLE,
@@ -163,6 +182,28 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO articulo(ID_Articulo, Nombre, Precio, Existencia, Categoria, Almacen, Costo) VALUES
+	('1169005156', 'Sofá Tarte ', 19790.00, 20, 1, 3, 1600),
+    ('1132739532', 'Mesa centro Coffee', 1799.00, 50, 1, 3, 1500),
+    ('1164135451', 'Sillón Selena', 11029.00, 10, 1, 3, 10000),
+    ('9936499631', 'Funda sofá antideslizante protector', 1319.00, 35, 1, 3, 1200),
+    ('1155395202', 'Sofá cama Milán', 17999.00, 20, 1, 3, 14000),
+    ('1170167321', 'Laptop HP AL2Q6LT#ABM 14 pulgadas Full HD Intel Core i7 Intel Iris Plus 8 GB RAM 512 GB SSD', 16798.00, 40, 2, 2, 14000),
+    ('1100125681', 'Protector de Voltajer PV-2500 d negro', 719.00, 30, 2, 2, 400),
+    ('1160613404', 'Pantalla Smart TV LED de 55 pulgadas 4K UHD 55UR7800PSB', 11549.00, 25, 2, 2, 9000),
+    ('1171137426', 'Proyector Pro-260', 1490.00, 20, 2, 2, 900),
+    ('1097521774', 'Barra de sonido HT-S20R con subwoofer', 7499.00, 45, 2, 2, 5000),
+    ('1094212215', 'Refrigerador Unipuerta 7 pies RR63D6WBX', 10599.00, 10, 3, 4, 7000),
+    ('1159708809', 'Estufa de piso a gas LP Focaris 76.60 cm em7654bfis3 de 6 quemadores', 12599.00, 15, 3, 4, 10000),
+    ('1096115578', 'Horno eléctrico rosticero 30 L', 4109.00, 15, 3, 4, 2000),
+    ('1104750318', 'Aire acondicionado mini split frío y calor 12000 BTU MMT12HABWCAM2 115 V ', 12199.00, 20, 3, 4, 10000),
+    ('1161090201', 'Caminadora semiprofesional ce-8610 plegable', 12649.00, 30, 4, 5, 10000),
+	('1112212848', 'Bicicleta fija fitness MKZ-703-18 kg', 12999.00, 30, 4, 5, 11000),
+	('1128812586', 'Elíptica magnética Sunny Fitness Cross SF-E3955', 9999.00, 20, 4, 5, 7000),
+	('1136993441', 'Maleta deportiva Project Rock Duffle', 2999.00, 30, 4, 5, 1200),
+	('1109389095', 'Botella de hidratación de acero inoxidable', 799.00, 50, 4, 5, 350),
+    ('7501022014080', 'Refresco 7up 1.5 lts', 30.00, 100, 5, 1, 22);
+
 
 -- -----------------------------------------------------
 -- Table `dbliverpool`.`detalle_venta`
@@ -170,10 +211,10 @@ COLLATE = utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `dbliverpool`.`detalle_venta` ;
 
 CREATE TABLE IF NOT EXISTS `dbliverpool`.`detalle_venta` (
+  `venta` CHAR(10) NOT NULL,
+  `articulo` CHAR(13) NOT NULL,
   `Cantidad` INT NOT NULL,
   `Subtotal` FLOAT NOT NULL,
-  `venta` CHAR(10) NOT NULL,
-  `articulo` CHAR(10) NOT NULL,
   PRIMARY KEY (`venta`, `articulo`),
   INDEX `fk_detalle_venta_venta1_idx` (`venta` ASC) VISIBLE,
   INDEX `fk_detalle_venta_articulo1_idx` (`articulo` ASC) VISIBLE,
@@ -208,6 +249,11 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO proveedor(ID_Proveedor, Nombre, Contacto, Telefono, Direccion) VALUES
+	(9999, 'Pepsi', 'Horacio', 5557771118, 'Av. Venustiano Carranza'),
+	(8888, 'Muebleria Twoson', 'Paula', 4443330002, 'Calle 3 de Mayo'),
+	(7777, 'Electrodomesticos Onett', 'Mariano', 8881110002, 'Av Solovino'),
+	(6666, 'Electronica Fourside', 'Ernesto', 7774443339, 'Calle 9na poniente');
 
 -- -----------------------------------------------------
 -- Table `dbliverpool`.`Compras`
